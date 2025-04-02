@@ -1,0 +1,20 @@
+[
+    {
+        "username": "67210",
+        "password": "9999",
+        "usecase": "Login Succcess",
+        "expectedResult": ""
+    },
+    {
+        "username": "67210",
+        "password": "99998",
+        "usecase": "Login fail",
+        "expectedResult": ""
+    },
+    {
+        "username": "ACBBD",
+        "password": "99998",
+        "usecase": "Login fail",
+        "expectedResult": ""
+    }
+]
