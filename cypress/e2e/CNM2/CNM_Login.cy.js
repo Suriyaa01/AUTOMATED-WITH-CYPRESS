@@ -1,4 +1,4 @@
-describe("Login Test", () => {
+describe("Login CNM Test", () => {
   beforeEach(() => {
     cy.visit("http://10.32.0.97/cnm2/login");
     cy.fixture("users").as("users"); // โหลดไฟล์ users เพียงครั้งเดียว
