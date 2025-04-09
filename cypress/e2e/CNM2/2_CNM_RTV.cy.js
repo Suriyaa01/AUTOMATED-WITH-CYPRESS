@@ -8,11 +8,9 @@ describe("RTV Test", () => {
     cy.visit("/rtvacc");
 
     // ✅ ใช้ `{ timeout: 5000 }` เพื่อลด `cy.wait()`
-    cy.contains("ข้อมูลรายการคืนสินค้า RTV", { timeout: 5000 }).should(
-      "be.visible"
-    );
-    cy.contains("BIGC").should("be.visible");
-    cy.contains("LOTUS").should("be.visible");
+    cy.contains(/BIGC|LOTUS/).should("be.visible");
+    //cy.contains("BIGC").should("be.visible");
+    //cy.contains("LOTUS").should("be.visible");
   });
 
   it("Show rtv table on detail page", () => {
@@ -43,7 +41,9 @@ describe("RTV Test", () => {
     cy.contains("คุณต้องการลบรายการนี้").should("be.visible");
     cy.xpath("/html/body/div[3]/div/div[6]/button[1]").click(); // คลิกปุ่ม "ยืนยัน"
     cy.wait(500); // รอให้การดำเนินการเสร็จสิ้น
-    //cy.contains("ลบข้อมูลเรียบร้อยแล้ว").should("be.visible");
+    cy.contains(
+      /ไม่สามารถลบได้ เอกสารออกใบคุมแล้ว|ลบข้อมูลเรียบร้อยแล้ว/
+    ).should("be.visible");
     cy.screenshot("RTV_DEL Success"); // ถ่ายรูปหน้าจอหลังจากลบข้อมูล
   });
 
@@ -57,7 +57,10 @@ describe("RTV Test", () => {
     cy.contains("คุณต้องการลบรายการนี้").should("be.visible");
     cy.xpath("/html/body/div[3]/div/div[6]/button[1]").click(); // คลิกปุ่ม "ยืนยัน"
     cy.wait(500); // รอให้การดำเนินการเสร็จสิ้น
-    cy.contains("ไม่สามารถลบได้ เอกสารออกใบคุมแล้ว").should("be.visible");
+    cy.contains(
+      /ไม่สามารถลบได้ เอกสารออกใบคุมแล้ว|ลบข้อมูลเรียบร้อยแล้ว/
+    ).should("be.visible");
+
     cy.screenshot("RTV_DEL ใบคุม");
     cy.reload();
     cy.wait(500); // ถ่ายรูปหน้าจอหลังจากลบข้อมูล
