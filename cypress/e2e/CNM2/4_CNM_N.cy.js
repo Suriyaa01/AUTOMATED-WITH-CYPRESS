@@ -1,7 +1,9 @@
-describe("N Test", () => {
+describe("ชุดทดสอบ Approve N", () => {
   beforeEach(() => {
-    cy.visit("http://10.32.0.97/cnm2/login");
-    cy.login("67210", "9999");
+    cy.session("loginSession", () => {
+      cy.visit("http://10.32.0.97/cnm2/login");
+      cy.login("67210", "9999");
+    });
   });
   //View
   it("VIEW Trucking", () => {

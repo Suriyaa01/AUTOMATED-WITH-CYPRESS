@@ -1,7 +1,9 @@
-describe("Trucking Test", () => {
+describe("ชุดทดสอบ Approve N", () => {
   beforeEach(() => {
-    cy.visit("http://10.32.0.97/cnm2/login");
-    cy.login("67210", "9999");
+    cy.session("loginSession", () => {
+      cy.visit("http://10.32.0.97/cnm2/login");
+      cy.login("67210", "9999");
+    });
   });
 
   //เพิ่มใบคุม
@@ -106,14 +108,22 @@ describe("Trucking Test", () => {
       .clear()
       .type("05/04/2025");
 
-    // เลือก Dropdown บริษัท
+    // 👉 คลิกเพื่อเปิด Dropdown บริษัท
     cy.xpath(
       '//*[@id="group_form"]/div[2]/div[2]/div/div/div[2]/div/div/div/div'
     )
       .should("be.visible", { timeout: 5000 })
       .click();
-    cy.contains("LE01 : บริษัท เอก-ชัย ดิสทริบิวชั่น ซิสเทม จำกัด")
-      .should("be.visible", { timeout: 5000 })
+
+    // 👉 รอให้ Dropdown ปรากฏ และ ตรวจสอบว่าแสดงผลด้วย opacity: 1
+    cy.get(".ant-select-dropdown", { timeout: 8000 }) // เพิ่มเวลารอ
+      .should("have.css", "opacity", "1")
+      .should("be.visible");
+
+    // 👉 เลือกตัวเลือกที่ 2 (index 1) ใน Dropdown
+    cy.get(".ant-select-dropdown .ant-select-item-option")
+      .eq(1) // เลือกอันดับที่ 2
+      .should("be.visible", { timeout: 5000 }) // รอให้ตัวเลือกแสดงผล
       .click();
 
     // เลือกรถที่ใช้

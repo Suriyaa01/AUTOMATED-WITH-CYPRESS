@@ -18,7 +18,20 @@ describe("Login CNM Test", () => {
           cy.intercept("GET", "**/dashboard").as("dashboardLoad");
           cy.wait("@dashboardLoad", { timeout: 5000 });
 
-          cy.contains(user.expectedResult).should("be.visible");
+          // ตรวจสอบว่า contain user.expectedResult หรือไม่
+          cy.contains(user.expectedResult)
+            .should("be.visible")
+            .then((element) => {
+              // ถ้าไม่พบ (หรือข้อความไม่ตรง) ให้ทำการ reload หน้า
+              if (!element.length) {
+                cy.log("Expected result not found, reloading page...");
+                cy.reload();
+                // หลังจาก reload แล้วให้รอให้หน้าโหลดและตรวจสอบอีกครั้ง
+                cy.wait(2000); // รอ 2 วินาที หรือปรับตามที่เหมาะสม
+                cy.contains(user.expectedResult).should("be.visible");
+              }
+            });
+
           cy.screenshot(`${user.usecase}`);
         }
       });

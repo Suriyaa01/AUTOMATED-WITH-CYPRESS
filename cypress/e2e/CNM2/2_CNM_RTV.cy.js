@@ -1,16 +1,30 @@
-describe("RTV Test", () => {
+describe("ชุดทดสอบ Approve N", () => {
   beforeEach(() => {
-    cy.visit("http://10.32.0.97/cnm2/login");
-    cy.login("67210", "9999");
+    cy.session("loginSession", () => {
+      cy.visit("http://10.32.0.97/cnm2/login");
+      cy.login("67210", "9999");
+    });
   });
 
   it("Show rtv table on index page", () => {
     cy.visit("/rtvacc");
 
-    // ✅ ใช้ `{ timeout: 5000 }` เพื่อลด `cy.wait()`
-    cy.contains(/BIGC|LOTUS/).should("be.visible");
-    //cy.contains("BIGC").should("be.visible");
-    //cy.contains("LOTUS").should("be.visible");
+    // รอให้หน้าโหลดเสร็จ
+    cy.wait(500);
+
+    // ตรวจสอบข้อความที่ต้องการ
+    cy.contains(/BIGC|LOTUS/)
+      .should("be.visible", { timeout: 5000 })
+      .then((element) => {
+        if (!element) {
+          // ถ้าไม่พบ ให้ทำการรีเฟรชหน้า
+          cy.reload();
+          // รอให้หน้าโหลดใหม่
+          cy.wait(1000);
+          // ตรวจสอบอีกครั้งหลังจากรีเฟรช
+          cy.contains(/BIGC|LOTUS/).should("be.visible", { timeout: 5000 });
+        }
+      });
   });
 
   it("Show rtv table on detail page", () => {
